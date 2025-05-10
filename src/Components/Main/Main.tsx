@@ -9,20 +9,21 @@ import { useChatStore } from "../../store/chatStore";
 const Main = () => {
   const [text, setText] = useState("");
   const [selectedOption, setSelectedOption] = useState("General");
-  const [loading, setLoading] = useState(false);
-  const [hasFailed, setHasFailed] = useState(false);
-  const [sidebarIsClicked, setSidebarIsClicked] = useState(false);
+  const [hasFailed, setHasFailed] = useState<boolean>(false);
+  const [sidebarIsClicked, setSidebarIsClicked] = useState<boolean>(false);
 
   const {
     userInput,
     aiOutput,
     currentStreamedMessage,
-    streaming,
     addUserInput,
     addAiOutput,
     setCurrentStreamedMessage,
-    setStreaming,
     appendToCurrentStreamedMessage,
+    streaming,
+    setStreaming,
+    loading,
+    setLoading,
   } = useChatStore();
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -58,9 +59,11 @@ const Main = () => {
       let result = "";
 
       addUserInput(text);
-      setStreaming(true);
       setCurrentStreamedMessage("");
       setText("");
+
+      setLoading(false);
+      setStreaming(true);
 
       while (!done) {
         const { value, done: doneReading } = await reader.read();
@@ -70,6 +73,7 @@ const Main = () => {
         appendToCurrentStreamedMessage(chunk);
       }
 
+      setStreaming(false);
       addAiOutput(result);
 
       await axios.post("http://localhost:3000/api/save-conversation", {
@@ -78,18 +82,17 @@ const Main = () => {
         selectedOption,
       });
     } catch (error) {
+      setLoading(false);
+      setStreaming(false);
       setHasFailed(true);
       setTimeout(() => setHasFailed(false), 5000);
       console.error(`An error has occurred: ${error}`);
-    } finally {
-      setStreaming(false);
-      setLoading(false);
     }
   };
 
   return (
     <div
-      className={`${aiOutput.length === 0 ? "min-h-screen flex flex-col justify-center items-center transition-all duration-200 ease-in-out" : ""} ${sidebarIsClicked ? "ml-64" : "ml-0"}`}
+      className={`transition-all duration-200 ease-in-out ${aiOutput.length === 0 ? "min-h-screen flex flex-col justify-center items-center" : ""} ${sidebarIsClicked ? "ml-64" : "ml-0"}`}
     >
       <Topbar sidebarIsClicked={sidebarIsClicked} setSidebarIsClicked={setSidebarIsClicked} />
       {aiOutput.length === 0 && !currentStreamedMessage ? (
@@ -115,6 +118,7 @@ const Main = () => {
           aiOutput={aiOutput}
           currentStreamedMessage={currentStreamedMessage}
           streaming={streaming}
+          sidebarIsClicked={sidebarIsClicked}
         />
       )}
       {aiOutput.length === 0 ? (

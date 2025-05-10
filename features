@@ -1,3 +1,5 @@
 allow users to  halt ai output by pressing the stop button
 
 make the topbar consistent across all pages. Keep user login functionality for all topbar. adjust accordingly.
+
+format ai response so it looks more like chatgpt

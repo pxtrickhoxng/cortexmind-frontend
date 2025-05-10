@@ -9,8 +9,8 @@ const Header = () => {
 
   return (
     <div>
-      <p className={`text-xs text-blue-300 pb-4 duration-500 ease-in-out ${loaded}`}>QUICK ANSWERS</p>
-      <h1 className={`text-6xl duration-500 ease-in-out delay-400 ${loaded}`}>Frequently Asked Questions</h1>
+      <p className={`text-xs text-blue-300 pb-4 duration-400 ease-in-out ${loaded}`}>QUICK ANSWERS</p>
+      <h1 className={`text-6xl duration-400 ease-in-out delay-200 ${loaded}`}>Frequently Asked Questions</h1>
     </div>
   );
 };

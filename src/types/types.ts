@@ -34,4 +34,5 @@ export type ConversationMainText = MainTextAreaProps & {
   aiOutput: string[];
   currentStreamedMessage: string;
   streaming: boolean;
+  sidebarIsClicked: boolean;
 };

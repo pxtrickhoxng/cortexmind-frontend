@@ -1,7 +1,7 @@
 import { TextAreaProps } from "../../types/types";
 
 const style =
-  "w-full min-h-[40px] max-h-72 text-white rounded-xl resize-none focus:outline-none bg-transparent custom-scrollbar px-2";
+  "w-full min-h-[40px] max-h-72 text-white rounded-xl resize-none focus:outline-none bg-transparent custom-scrollbar px-2 select-none";
 
 const TextArea = ({ text, handleChange, handleSubmit }: TextAreaProps) => {
   return (
