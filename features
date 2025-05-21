@@ -1,5 +1,12 @@
-allow users to  halt ai output by pressing the stop button
+allow users to halt ai output by pressing the stop button
+
+tie the database to access only the user's messages
+
+add to AI: make sure the user cant interact with the preset message (like me telling the ai to respond in markdown)
 
 make the topbar consistent across all pages. Keep user login functionality for all topbar. adjust accordingly.
+make top bar disappear when i scroll
 
-format ai response so it looks more like chatgpt
+change login design on auth0
+
+PROJECT CREATION DATE: 4/20

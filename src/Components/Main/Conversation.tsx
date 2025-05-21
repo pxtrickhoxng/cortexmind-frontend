@@ -1,7 +1,8 @@
-import ReactMarkdown from "react-markdown";
 import MainTextArea from "./MainTextArea";
 import { useChatStore } from "../../store/chatStore";
 import { ConversationMainText } from "../../types/types";
+import "highlight.js/styles/github-dark.css";
+import CodeMarkdown from "./CodeMarkdown";
 
 const Conversation = ({
   text,
@@ -15,9 +16,7 @@ const Conversation = ({
   const { userInput, aiOutput, currentStreamedMessage, streaming } = useChatStore();
 
   return (
-    <div
-      className={`flex flex-col items-center justify-start min-h-screen w-full pt-20 px-4 sm:px-8 space-y-4 pb-32  `}
-    >
+    <div className={`flex flex-col items-center justify-start min-h-screen w-full pt-20 px-4 sm:px-8 space-y-4 pb-32`}>
       {userInput.map((input, index) => (
         <div key={index} className="w-full max-w-3xl pb-2 shrink-0">
           <div className="flex justify-end mb-2">
@@ -26,11 +25,12 @@ const Conversation = ({
             </div>
           </div>
 
-          <div className="px-4 py-4 text-white overflow-x-auto">
-            <ReactMarkdown>
-              {aiOutput[index] ?? (index === userInput.length - 1 ? currentStreamedMessage : "")}
-            </ReactMarkdown>
-          </div>
+          <CodeMarkdown
+            aiOutput={aiOutput}
+            userInput={userInput}
+            currentStreamedMessage={currentStreamedMessage}
+            index={index}
+          />
         </div>
       ))}
 

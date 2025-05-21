@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Conversation from "./Conversation";
 import Center from "./Center";
 import Topbar from "./Topbar";
@@ -7,12 +7,14 @@ import FAQButton from "./FAQButton";
 import { useChatStore } from "../../store/chatStore";
 
 const Main = () => {
-  const [text, setText] = useState("");
   const [selectedOption, setSelectedOption] = useState("General");
   const [hasFailed, setHasFailed] = useState<boolean>(false);
   const [sidebarIsClicked, setSidebarIsClicked] = useState<boolean>(false);
+  const baseURL = import.meta.env.VITE_BASE_URL;
 
   const {
+    text,
+    setText,
     userInput,
     aiOutput,
     currentStreamedMessage,
@@ -24,6 +26,9 @@ const Main = () => {
     setStreaming,
     loading,
     setLoading,
+    mostRecentMessages,
+    setMostRecentMessages,
+    userId,
   } = useChatStore();
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -41,12 +46,12 @@ const Main = () => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:3000/api/submit", {
+      const response = await fetch(`${baseURL}/api/submit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ text, selectedOption }),
+        body: JSON.stringify({ text, selectedOption, userId }),
       });
 
       if (!response.body) {
@@ -76,55 +81,79 @@ const Main = () => {
       setStreaming(false);
       addAiOutput(result);
 
-      await axios.post("http://localhost:3000/api/save-conversation", {
+      await axios.post(`${baseURL}/api/save-conversation`, {
         userInput: [...userInput, text],
         aiOutput: [...aiOutput, result],
         selectedOption,
+        userId,
       });
     } catch (error) {
       setLoading(false);
       setStreaming(false);
       setHasFailed(true);
       setTimeout(() => setHasFailed(false), 5000);
-      console.error(`An error has occurred: ${error}`);
+      console.error(error);
     }
   };
 
+  useEffect(() => {
+    axios.post(`${baseURL}/api/new-chat`);
+  }, [baseURL]);
+
+  useEffect(() => {
+    const fetchConversation = () => {
+      axios
+        .post(`${baseURL}/api/most-recent-conversation`, { userId })
+        .then(response => {
+          if (JSON.stringify(response.data) !== JSON.stringify(mostRecentMessages)) {
+            setMostRecentMessages(response.data);
+          }
+        })
+        .catch(console.error);
+    };
+
+    fetchConversation();
+    const interval = setInterval(fetchConversation, 3000);
+    return () => clearInterval(interval);
+  }, [mostRecentMessages, setMostRecentMessages, baseURL, userId]);
+
   return (
-    <div
-      className={`transition-all duration-200 ease-in-out ${aiOutput.length === 0 ? "min-h-screen flex flex-col justify-center items-center" : ""} ${sidebarIsClicked ? "ml-64" : "ml-0"}`}
-    >
-      <Topbar sidebarIsClicked={sidebarIsClicked} setSidebarIsClicked={setSidebarIsClicked} />
-      {aiOutput.length === 0 && !currentStreamedMessage ? (
-        <Center
-          handleChange={handleChange}
-          text={text}
-          handleSubmit={handleSubmit}
-          selectedOption={selectedOption}
-          handleSelectChange={handleSelectChange}
-          loading={loading}
-          hasFailed={hasFailed}
-          streaming={streaming}
-        />
-      ) : (
-        <Conversation
-          text={text}
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-          selectedOption={selectedOption}
-          handleSelectChange={handleSelectChange}
-          loading={loading}
-          userInput={userInput}
-          aiOutput={aiOutput}
-          currentStreamedMessage={currentStreamedMessage}
-          streaming={streaming}
-          sidebarIsClicked={sidebarIsClicked}
-        />
-      )}
-      {aiOutput.length === 0 ? (
-        <footer className="absolute bottom-0 mb-2 text-slate-500 text-sm ">Powered by Deepseek</footer>
-      ) : null}
-      <FAQButton />
+    <div>
+      <div
+        className={`transition-all duration-200 ease-in-out ${aiOutput.length === 0 ? "min-h-screen flex flex-col justify-center items-center" : ""} ${sidebarIsClicked ? "ml-64" : "ml-0"}`}
+      >
+        <Topbar sidebarIsClicked={sidebarIsClicked} setSidebarIsClicked={setSidebarIsClicked} />
+        {aiOutput.length === 0 && !currentStreamedMessage ? (
+          <Center
+            handleChange={handleChange}
+            text={text}
+            handleSubmit={handleSubmit}
+            selectedOption={selectedOption}
+            handleSelectChange={handleSelectChange}
+            loading={loading}
+            hasFailed={hasFailed}
+            streaming={streaming}
+          />
+        ) : (
+          <Conversation
+            text={text}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            selectedOption={selectedOption}
+            handleSelectChange={handleSelectChange}
+            loading={loading}
+            userInput={userInput}
+            aiOutput={aiOutput}
+            currentStreamedMessage={currentStreamedMessage}
+            streaming={streaming}
+            sidebarIsClicked={sidebarIsClicked}
+          />
+        )}
+        {aiOutput.length === 0 ? (
+          <footer className="absolute bottom-0 mb-2 text-slate-500 text-sm ">Powered by Deepseek</footer>
+        ) : null}
+        <FAQButton />
+      </div>
     </div>
   );
 };

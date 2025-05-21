@@ -3,10 +3,12 @@ import Home from "./pages/HomePage";
 import Faq from "./pages/FaqPage";
 import ContactPage from "./pages/ContactPage";
 import TestingPage from "./pages/TestingPage";
+import { StoreUserId } from "./Components/Userlog";
 
 function App() {
   return (
     <div>
+      <StoreUserId />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />

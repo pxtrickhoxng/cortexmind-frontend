@@ -2,16 +2,19 @@ import spinner from "../../assets/icons/spinner.svg";
 import stop from "../../assets/icons/stop.svg";
 import send from "../../assets/icons/sendArrow.svg";
 
-const SendButton = ({ loading, streaming, text }: { loading: boolean; streaming: boolean; text: string }) => {
+type sendButtonTypes = {
+  loading: boolean;
+  streaming: boolean;
+  text: string;
+};
+
+const SendButton = ({ loading, streaming, text }: sendButtonTypes) => {
   let content;
   if (loading === true) {
-    console.log(`1. ${typeof streaming}`);
     content = <img src={spinner} alt="loading-spinner" className="h-4 w-4 filter invert" />;
   } else if (streaming === true) {
-    console.log(`2. ${typeof streaming}`);
     content = <img src={stop} alt="stop-icon" className="h-3 w-3 filter invert" />;
   } else {
-    console.log(`3. ${typeof streaming}`);
     content = (
       <img
         src={send}

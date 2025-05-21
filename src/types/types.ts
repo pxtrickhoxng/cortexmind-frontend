@@ -36,3 +36,12 @@ export type ConversationMainText = MainTextAreaProps & {
   streaming: boolean;
   sidebarIsClicked: boolean;
 };
+
+export type ChatMessage = {
+  chat_id: string;
+  content: string;
+  message_id: number;
+  role: "Role.User" | "Role.Assistant";
+  timestamp: string;
+  user_id: number;
+};

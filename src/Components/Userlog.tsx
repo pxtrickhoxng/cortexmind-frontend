@@ -1,12 +1,14 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import cortexmind from "../../src/assets/icons/brainseek-final.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logoutSvg from "../assets/icons/logout.svg";
 import terms_and_policies from "../assets/icons/terms_and_policies.svg";
 import aboutSvg from "../assets/icons/info.svg";
+import { useChatStore } from "../store/chatStore";
 
 export const LoginButton = () => {
   const { loginWithRedirect, isAuthenticated } = useAuth0();
+
   if (isAuthenticated) {
     return null;
   } else {
@@ -17,6 +19,23 @@ export const LoginButton = () => {
       >
         <button className="cursor-pointer">Log in</button>
       </div>
+    );
+  }
+};
+
+export const LoginPopup = () => {
+  const { loginWithRedirect, isAuthenticated } = useAuth0();
+
+  if (isAuthenticated) {
+    return null;
+  } else {
+    return (
+      <button
+        className="bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg font-medium"
+        onClick={() => loginWithRedirect()}
+      >
+        Log in
+      </button>
     );
   }
 };
@@ -34,10 +53,25 @@ export const UserPic = () => {
     return (
       <div>
         <div
-          className="className='flex space-x-4 rounded-3xl my-1 mx-2 p-1 font-medium cursor-pointer hover:bg-white/15"
+          className="flex space-x-4 rounded-3xl my-1 mx-2 p-1 font-medium cursor-pointer hover:bg-white/15"
           onClick={clicked}
         >
-          <img className="w-8 rounded-full select-none" src={user?.picture} alt="User picture" draggable={false} />
+          <div
+            className="w-8 h-8 rounded-full select-none bg-cover bg-center outline-1 outline-white/50"
+            style={{ backgroundImage: `url(${cortexmind})` }}
+          >
+            {user?.picture && (
+              <img
+                className="w-8 h-8 rounded-full select-none object-cover"
+                src={user.picture}
+                alt="User picture"
+                draggable={false}
+                onError={e => {
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+            )}
+          </div>
         </div>
         {imgclicked === true ? (
           <div className="absolute bg-slate-700 rounded-lg px-2 py-2 -translate-x-40 flex flex-col w-50 text-white text-sm gap-3">
@@ -77,4 +111,22 @@ export const UserName = () => {
   } else {
     return <p className="text-stone-200 text-base">Welcome, {user?.name}</p>;
   }
+};
+
+export const StoreUserId = () => {
+  const { user, isAuthenticated } = useAuth0();
+  const setUserId = useChatStore(state => state.setUserId);
+  const userId = useChatStore(state => state.userId);
+  const setAuthenticated = useChatStore(state => state.setAuthenticated);
+
+  useEffect(() => {
+    setAuthenticated(isAuthenticated);
+  }, [setAuthenticated, isAuthenticated]);
+
+  useEffect(() => {
+    if (isAuthenticated && user?.sub && userId !== user.sub) {
+      setUserId(user.sub);
+    }
+  }, [isAuthenticated, user, userId, setUserId]);
+  return null;
 };

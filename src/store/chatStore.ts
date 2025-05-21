@@ -1,6 +1,8 @@
 import { create } from "zustand";
 
 type ChatStore = {
+  text: string;
+  setText: (text: string) => void;
   userInput: string[];
   aiOutput: string[];
   currentStreamedMessage: string;
@@ -12,9 +14,20 @@ type ChatStore = {
   loading: boolean;
   setLoading: (loading: boolean) => void;
   appendToCurrentStreamedMessage: (chunk: string) => void;
+  mostRecentMessages: string[];
+  setMostRecentMessages: (mostRecentMessages: string[]) => void;
+  resetChat: () => void;
+  showDeletePopup: boolean;
+  setShowDeletePopup: (showDeletePopup: boolean) => void;
+  userId: string;
+  setUserId: (userId: string) => void;
+  authenticated: boolean;
+  setAuthenticated: (authenticated: boolean) => void;
 };
 
 export const useChatStore = create<ChatStore>(set => ({
+  text: "",
+  setText: text => set({ text }),
   userInput: [],
   aiOutput: [],
   currentStreamedMessage: "",
@@ -30,4 +43,20 @@ export const useChatStore = create<ChatStore>(set => ({
       ...state,
       currentStreamedMessage: state.currentStreamedMessage + chunk,
     })),
+  mostRecentMessages: [],
+  setMostRecentMessages: (mostRecentMessages: string[]) => set({ mostRecentMessages }),
+  resetChat: () =>
+    set({
+      userInput: [],
+      aiOutput: [],
+      currentStreamedMessage: "",
+      streaming: false,
+      loading: false,
+    }),
+  showDeletePopup: false,
+  setShowDeletePopup: showDeletePopup => set({ showDeletePopup }),
+  userId: "",
+  setUserId: userId => set({ userId }),
+  authenticated: false,
+  setAuthenticated: authenticated => set({ authenticated }),
 }));

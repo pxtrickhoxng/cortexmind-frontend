@@ -13,7 +13,7 @@ const MainTextArea = ({
   streaming,
 }: MainTextAreaProps) => {
   return (
-    <div className="bg-slate-800 rounded-3xl pt-4 pl-4 flex flex-col mt-8 w-[90%] mx-auto outline-2 outline-slate-700">
+    <div className="bg-slate-800 rounded-3xl pt-4 pl-4 flex flex-col mt-8 outline-2 outline-slate-700">
       <TextArea text={text} handleChange={handleChange} handleSubmit={handleSubmit} />
       <div className="ml-auto relative flex mt-2">
         <Select selectedOption={selectedOption} handleSelectChange={handleSelectChange} />
