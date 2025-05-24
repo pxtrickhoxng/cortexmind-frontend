@@ -119,10 +119,18 @@ const Main = () => {
 
   return (
     <div>
+      {sidebarIsClicked && (
+        <div className="fixed inset-0 bg-black/70 z-40 md:hidden" onClick={() => setSidebarIsClicked(false)}></div>
+      )}
+
+      {/* Main content container */}
       <div
-        className={`transition-all duration-200 ease-in-out ${aiOutput.length === 0 ? "min-h-screen flex flex-col justify-center items-center" : ""} ${sidebarIsClicked ? "ml-64" : "ml-0"}`}
+        className={`transition-all duration-200 ease-in-out ${
+          aiOutput.length === 0 ? "min-h-screen flex flex-col justify-center items-center" : ""
+        } ${sidebarIsClicked ? "md:ml-64 ml-0" : "ml-0"}`}
       >
         <Topbar sidebarIsClicked={sidebarIsClicked} setSidebarIsClicked={setSidebarIsClicked} />
+
         {aiOutput.length === 0 && !currentStreamedMessage ? (
           <Center
             handleChange={handleChange}
@@ -149,9 +157,11 @@ const Main = () => {
             sidebarIsClicked={sidebarIsClicked}
           />
         )}
-        {aiOutput.length === 0 ? (
-          <footer className="absolute bottom-0 mb-2 text-slate-500 text-sm ">Powered by Deepseek</footer>
-        ) : null}
+
+        {aiOutput.length === 0 && (
+          <footer className="absolute bottom-0 mb-2 text-slate-500 text-sm">Powered by Deepseek</footer>
+        )}
+
         <FAQButton />
       </div>
     </div>

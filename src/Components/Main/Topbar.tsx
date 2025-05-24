@@ -1,9 +1,9 @@
 import { LoginButton, UserPic, UserName } from "../Userlog";
 import openSidebar from "../../assets/icons/sidebarOpen.svg";
 import Sidebar from "./Sidebar";
-import { useState } from "react";
 import { useChatStore } from "../../store/chatStore";
 import PleaseLogin from "./PleaseLogin";
+import { useState, useEffect } from "react";
 
 type topBarTypes = {
   sidebarIsClicked: boolean;
@@ -15,6 +15,7 @@ const Topbar = ({ sidebarIsClicked, setSidebarIsClicked }: topBarTypes) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const authenticated = useChatStore(state => state.authenticated);
   const [accessDenied, setAccessDenied] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
 
   const handleClickedOpen = () => {
     if (!authenticated) {
@@ -39,6 +40,15 @@ const Topbar = ({ sidebarIsClicked, setSidebarIsClicked }: topBarTypes) => {
     }, 200);
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setHasScrolled(scrollTop > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div>
       <Sidebar isClicked={sidebarIsClicked} handleClickedClose={handleClickedClose} />
@@ -56,8 +66,8 @@ const Topbar = ({ sidebarIsClicked, setSidebarIsClicked }: topBarTypes) => {
 
         <div
           className={`absolute left-1/2 -translate-x-1/2 transition-all duration-200 ease-in-out ${
-            sidebarIsClicked ? "ml-32" : "ml-0"
-          }`}
+            sidebarIsClicked ? "md:ml-32 ml-0" : "ml-0"
+          } ${hasScrolled ? "opacity-0" : "opacity-100"}`}
         >
           <UserName />
         </div>

@@ -5,6 +5,7 @@ import logoutSvg from "../assets/icons/logout.svg";
 import terms_and_policies from "../assets/icons/terms_and_policies.svg";
 import aboutSvg from "../assets/icons/info.svg";
 import { useChatStore } from "../store/chatStore";
+import { Link } from "react-router-dom";
 
 export const LoginButton = () => {
   const { loginWithRedirect, isAuthenticated } = useAuth0();
@@ -75,14 +76,14 @@ export const UserPic = () => {
         </div>
         {imgclicked === true ? (
           <div className="absolute bg-slate-700 rounded-lg px-2 py-2 -translate-x-40 flex flex-col w-50 text-white text-sm gap-3">
-            <div className={optionsHover}>
+            <Link className={optionsHover} to="/faq">
               <img className="w-5 invert -ml-0.5" src={aboutSvg} alt="svg for about page" draggable="false" />
-              <p>About</p>
-            </div>
-            <div className={optionsHover}>
+              <p>FAQ</p>
+            </Link>
+            <Link className={optionsHover} to="/contact">
               <img className="w-4 invert" src={terms_and_policies} alt="terms and policies svg" />
-              <p>Terms & policies</p>
-            </div>
+              <p>Send an email</p>
+            </Link>
 
             <hr className="text-slate-500"></hr>
             <div

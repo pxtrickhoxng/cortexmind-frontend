@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Topbar = () => {
   return (
-    <div className="flex justify-between items-center w-full py-3 px-20 sm:px-30 md:px-40 lg:px-70 font-medium">
+    <div className="flex flex-wrap justify-between items-center w-full py-3 px-10 sm:px-20 md:px-30 lg:px-62 font-medium gap-y-2">
       <Link className="flex items-center text-white hover:opacity-65" to="/" draggable={false}>
         <img className="w-10" src={brainseek} alt="brainseek-logo" draggable={false} />
         <p>CortexMind</p>
