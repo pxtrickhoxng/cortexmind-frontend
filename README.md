@@ -7,10 +7,16 @@ CortexMind is a full-stack AI-powered chat application that simulates the functi
 ## Screenshots
 
 ### Chat in Progress (Real-Time Streaming with Code Blocks)
-<img width="883" height="898" alt="Empty Chat UI" src="https://github.com/user-attachments/assets/6430b5fa-5fef-4dab-b9e3-03f4ae5e3708" />
+<img width="883" height="898" src="https://github.com/user-attachments/assets/6430b5fa-5fef-4dab-b9e3-03f4ae5e3708" />
 
 ### Clean, Responsive Chat Interface (Empty State)
-<img width="1916" height="902" alt="Chat in Progress" src="https://github.com/user-attachments/assets/2a0bc066-271b-421d-b904-958e54f613ce" />
+<img width="1916" height="902" src="https://github.com/user-attachments/assets/2a0bc066-271b-421d-b904-958e54f613ce" />
+
+### Sidebar Displaying User Chat Sessions
+<img width="547" height="694" src="https://github.com/user-attachments/assets/fac3e028-873a-444a-b0b6-729622cd6b82" />
+
+### Response Style Selector
+<img width="819" height="374" src="https://github.com/user-attachments/assets/573c5e80-a52b-4b44-92e4-cadb085b4474" />
 
 ---
 
