@@ -15,8 +15,12 @@ CortexMind is a full-stack AI-powered chat application that simulates the functi
 ### Sidebar Displaying User Chat Sessions
 <img width="547" height="694" src="https://github.com/user-attachments/assets/fac3e028-873a-444a-b0b6-729622cd6b82" />
 
+When a user clicks on a chat session, a request is sent to the backend to fetch all messages for that session, populating the page with the existing chat history.
+
 ### Response Style Selector
 <img width="819" height="374" src="https://github.com/user-attachments/assets/573c5e80-a52b-4b44-92e4-cadb085b4474" />
+
+Controls the `temperature` parameter of the DeepSeek-chat model, allowing users to adjust response creativity and style. More information can be found here: [DeepSeek Parameter Settings](https://api-docs.deepseek.com/quick_start/parameter_settings)
 
 ---
 
